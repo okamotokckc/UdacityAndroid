@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">FortuneTeller</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_refresh" translatable="false">Refresh</string>
+    <string name="action_share">Share</string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+    <string name="pref_mySign_label">My Sign</string>
+    <string name="pref_mySign_key" translatable="false">mySign</string>
+
+    <string name="pref_mySign_label_aries">Aries</string>
+    <string name="pref_mySign_label_taurus">Taurus</string>
+    <string name="pref_mySign_label_gemini">Gemini</string>
+    <string name="pref_mySign_label_cancer">Cancer</string>
+    <string name="pref_mySign_label_leo">Leo</string>
+    <string name="pref_mySign_label_virgo">Virgo</string>
+    <string name="pref_mySign_label_libra">Libra</string>
+    <string name="pref_mySign_label_scorpio">Scorpio</string>
+    <string name="pref_mySign_label_sagittarius">Sagittarius</string>
+    <string name="pref_mySign_label_capricorn">Capricorn</string>
+    <string name="pref_mySign_label_aquarius">Aquarius</string>
+    <string name="pref_mySign_label_pisces">Pisces</string>
+
+    <string name="pref_mySign_aries" translatable="false">aries</string>
+    <string name="pref_mySign_taurus" translatable="false">taurus</string>
+    <string name="pref_mySign_gemini" translatable="false">gemini</string>
+    <string name="pref_mySign_cancer" translatable="false">cancer</string>
+    <string name="pref_mySign_leo" translatable="false">leo</string>
+    <string name="pref_mySign_virgo" translatable="false">virgo</string>
+    <string name="pref_mySign_libra" translatable="false">libra</string>
+    <string name="pref_mySign_scorpio" translatable="false">scorpio</string>
+    <string name="pref_mySign_sagittarius" translatable="false">sagittarius</string>
+    <string name="pref_mySign_capricorn" translatable="false">capricorn</string>
+    <string name="pref_mySign_aquarius" translatable="false">aquarius</string>
+    <string name="pref_mySign_pisces" translatable="false">pisces</string>
+
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">fortuneteller.example.com</string>
+    <string name="content_authority">com.example.okamoto_kazuya.fortuneteller</string>
+</resources>

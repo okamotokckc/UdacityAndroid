@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="pref_mySign_options">
+        <item>@string/pref_mySign_label_aries</item>
+        <item>@string/pref_mySign_label_taurus</item>
+        <item>@string/pref_mySign_label_gemini</item>
+        <item>@string/pref_mySign_label_cancer</item>
+        <item>@string/pref_mySign_label_leo</item>
+        <item>@string/pref_mySign_label_virgo</item>
+        <item>@string/pref_mySign_label_libra</item>
+        <item>@string/pref_mySign_label_scorpio</item>
+        <item>@string/pref_mySign_label_sagittarius</item>
+        <item>@string/pref_mySign_label_capricorn</item>
+        <item>@string/pref_mySign_label_aquarius</item>
+        <item>@string/pref_mySign_label_pisces</item>
+    </string-array>
+
+    <string-array name="pref_mySign_values">
+        <item>@string/pref_mySign_aries</item>
+        <item>@string/pref_mySign_taurus</item>
+        <item>@string/pref_mySign_gemini</item>
+        <item>@string/pref_mySign_cancer</item>
+        <item>@string/pref_mySign_leo</item>
+        <item>@string/pref_mySign_virgo</item>
+        <item>@string/pref_mySign_libra</item>
+        <item>@string/pref_mySign_scorpio</item>
+        <item>@string/pref_mySign_sagittarius</item>
+        <item>@string/pref_mySign_capricorn</item>
+        <item>@string/pref_mySign_aquarius</item>
+        <item>@string/pref_mySign_pisces</item>
+    </string-array>
+</resources>
