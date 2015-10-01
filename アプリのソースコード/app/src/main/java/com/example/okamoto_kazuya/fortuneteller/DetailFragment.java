@@ -73,6 +73,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private Uri mUri;
     private String mShareMessage;
     private String mSignKey;
+    private ShareActionProvider mShareActionProvider;
+    private Boolean finishedCursorLoad = false;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -161,10 +163,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         mShareMessage = sign + " ラッキーアイテム：" + item;
         mSignKey =  Helpers.getSignKey(sign);
+        finishedCursorLoad = true;
+
+        setShareIntent();
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) { }
+    public void onLoaderReset(Loader<Cursor> loader) {
+        finishedCursorLoad = false;
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -172,10 +179,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         MenuItem menuItem = menu.findItem(R.id.action_share);
 
-        ShareActionProvider mShareActionProvider =
-                (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        setShareIntent();
+    }
 
-        if (mShareActionProvider != null ) {
+    private void setShareIntent() {
+        if (finishedCursorLoad && mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(createShareForecastIntent());
         }
     }
@@ -188,6 +197,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Uri imageUri = getShareImageUri();
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.putExtra(Intent.EXTRA_TEXT, mShareMessage);
+        shareIntent.putExtra("sms_body", mShareMessage);
         return shareIntent;
     }
 
