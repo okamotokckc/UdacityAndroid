@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.okamoto_kazuya.fortuneteller.sync.FortuneSyncAdapter;
+
 public class MainActivity extends AppCompatActivity implements FortuneFragment.Callback {
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements FortuneFragment.C
         } else {
             mTwoPane = false;
         }
+        Helpers.setSignDic(this);
+
+        FortuneSyncAdapter.initializeSyncAdapter(this);
     }
 
 

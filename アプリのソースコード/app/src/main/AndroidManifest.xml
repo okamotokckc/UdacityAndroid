@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +45,7 @@
         </activity>
 
         <provider
-            android:authorities="com.example.okamoto_kazuya.fortuneteller"
+            android:authorities="@string/content_authority"
             android:name=".data.HoroscopeProvider"
             android:exported="false"
             android:syncable="true" />

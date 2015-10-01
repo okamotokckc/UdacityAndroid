@@ -6,7 +6,7 @@
     <ListPreference
         android:title="@string/pref_mySign_label"
         android:key="@string/pref_mySign_key"
-        android:defaultValue="@string/pref_mySign_aries"
+        android:defaultValue="@string/pref_mySign_default"
         android:entryValues="@array/pref_mySign_values"
         android:entries="@array/pref_mySign_options" />
 

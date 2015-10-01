@@ -54,10 +54,11 @@
         android:layout_height="wrap_content" />
 
     <com.example.okamoto_kazuya.fortuneteller.Views.MyCustomView
-        android:id="@+id/myCustomView"
+        android:id="@+id/list_item_myCustomView"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
+        android:visibility="invisible"
         app:fill_color = "#ff9999"
         />
 

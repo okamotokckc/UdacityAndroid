@@ -78,10 +78,10 @@ public class FortuneFragment extends Fragment implements LoaderManager.LoaderCal
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            updateHoroscope();
-            return true;
-        }
+//        if (id == R.id.action_refresh) {
+//            updateHoroscope();
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -158,6 +158,7 @@ public class FortuneFragment extends Fragment implements LoaderManager.LoaderCal
         mHoroscopeAdapter.swapCursor(data);
         if (mPosition != ListView.INVALID_POSITION) {
             mListView.smoothScrollToPosition(mPosition);
+            mListView.setItemChecked(mPosition, true);
         }
     }
 

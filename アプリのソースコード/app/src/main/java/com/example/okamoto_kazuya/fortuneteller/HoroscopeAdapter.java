@@ -21,24 +21,11 @@ import java.util.HashMap;
  */
 public class HoroscopeAdapter extends CursorAdapter {
 
-    private final HashMap<String, String> SIGN_DIC;
+    private final Context mContext;
 
     public HoroscopeAdapter(final Context context, Cursor c, int flags) {
         super(context, c, flags);
-        SIGN_DIC = new HashMap<String, String>() {{
-            put(context.getString(R.string.pref_mySign_aries), "牡羊座");
-            put(context.getString(R.string.pref_mySign_taurus), "牡牛座");
-            put(context.getString(R.string.pref_mySign_gemini), "双子座");
-            put(context.getString(R.string.pref_mySign_cancer), "蟹座");
-            put(context.getString(R.string.pref_mySign_leo), "獅子座");
-            put(context.getString(R.string.pref_mySign_virgo), "乙女座");
-            put(context.getString(R.string.pref_mySign_libra), "天秤座");
-            put(context.getString(R.string.pref_mySign_scorpio), "蠍座");
-            put(context.getString(R.string.pref_mySign_sagittarius), "射手座");
-            put(context.getString(R.string.pref_mySign_capricorn), "山羊座");
-            put(context.getString(R.string.pref_mySign_aquarius), "水瓶座");
-            put(context.getString(R.string.pref_mySign_pisces), "魚座");
-        }};
+        mContext = context;
     }
 
     @Override
@@ -79,7 +66,7 @@ public class HoroscopeAdapter extends CursorAdapter {
                 PreferenceManager.getDefaultSharedPreferences(mContext);
         String mySignValue = sharedPrefs.getString(
                 context.getString(R.string.pref_mySign_key),
-                "");
+                context.getString(R.string.pref_mySign_default));
         if(isMySign(mySignValue, sign)) {
             signView.setTextColor(Color.RED);
         } else {
@@ -93,7 +80,7 @@ public class HoroscopeAdapter extends CursorAdapter {
         if(mySign == null || mySign.isEmpty()) { return false; }
         if(sign == null || sign.isEmpty()) { return false; }
 
-        String mySignJP = SIGN_DIC.get(mySign);
+        String mySignJP = Helpers.SIGN_DIC.get(mySign);
 
         return mySignJP.equals(sign);
     }

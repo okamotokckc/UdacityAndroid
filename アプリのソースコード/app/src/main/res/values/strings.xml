@@ -34,7 +34,7 @@
     <string name="pref_mySign_capricorn" translatable="false">capricorn</string>
     <string name="pref_mySign_aquarius" translatable="false">aquarius</string>
     <string name="pref_mySign_pisces" translatable="false">pisces</string>
-
+    <string name="pref_mySign_default" translatable="false">@string/pref_mySign_aries</string>
     <!-- SyncAdapter related -->
     <string name="sync_account_type">fortuneteller.example.com</string>
     <string name="content_authority">com.example.okamoto_kazuya.fortuneteller</string>

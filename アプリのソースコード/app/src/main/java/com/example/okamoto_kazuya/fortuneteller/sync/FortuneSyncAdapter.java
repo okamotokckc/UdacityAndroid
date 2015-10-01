@@ -8,12 +8,17 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.format.Time;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.okamoto_kazuya.fortuneteller.R;
 import com.example.okamoto_kazuya.fortuneteller.data.HoroscopeContract;
@@ -36,8 +41,14 @@ import java.util.Vector;
  */
 public class FortuneSyncAdapter extends AbstractThreadedSyncAdapter {
 
+    public static final int SYNC_INTERVAL = 60 * 60 * 12; // 12hours
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+
+    private final Context mContext;
+
     public FortuneSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+        mContext = context;
     }
 
     @Override
@@ -73,9 +84,11 @@ public class FortuneSyncAdapter extends AbstractThreadedSyncAdapter {
             horoscopeJsonStr = buffer.toString();
             getHoroscopeDataFromJson(horoscopeJsonStr, targetDayStr);
         } catch (IOException e) {
+            logErrorMessage();
             return ;
         } catch (JSONException e) {
-            e.printStackTrace();
+            logErrorMessage();
+            return ;
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -88,6 +101,17 @@ public class FortuneSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         }
 
+    }
+
+    private void logErrorMessage() {
+        Looper mainLooper = mContext.getMainLooper();
+        if (mainLooper != null) {
+            new Handler(mainLooper).post(new Runnable() {
+                public void run() {
+                    Toast.makeText(mContext, "占いデータの取得に失敗しました。", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     private Void getHoroscopeDataFromJson(String horoscopeJsonStr, String dayStr)
@@ -146,6 +170,23 @@ public class FortuneSyncAdapter extends AbstractThreadedSyncAdapter {
         return null;
     }
 
+    public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
+        Account account = getSyncAccount(context);
+        String authority = context.getString(R.string.content_authority);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // we can enable inexact timers in our periodic sync
+            SyncRequest request = new SyncRequest.Builder().
+                    syncPeriodic(syncInterval, flexTime).
+                    setSyncAdapter(account, authority).
+                    setExtras(new Bundle()).build();
+            ContentResolver.requestSync(request);
+        } else {
+            ContentResolver.addPeriodicSync(account,
+                    authority, new Bundle(), syncInterval);
+        }
+    }
+
+
     public static void syncImmediately(Context context) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
@@ -159,12 +200,25 @@ public class FortuneSyncAdapter extends AbstractThreadedSyncAdapter {
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         Account newAccount = new Account(
                 context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
+        String pw = accountManager.getPassword(newAccount);
+
         if ( null == accountManager.getPassword(newAccount) ) {
             if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
                 return null;
             }
+            onAccountCreated(newAccount, context);
         }
         return newAccount;
+    }
+
+    private static void onAccountCreated(Account newAccount, Context context) {
+        FortuneSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
+        syncImmediately(context);
+    }
+
+    public static void initializeSyncAdapter(Context context) {
+        getSyncAccount(context);
     }
 }
 

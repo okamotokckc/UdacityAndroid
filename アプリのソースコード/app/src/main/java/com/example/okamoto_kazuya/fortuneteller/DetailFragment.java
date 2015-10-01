@@ -1,9 +1,15 @@
 package com.example.okamoto_kazuya.fortuneteller;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,7 +25,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.okamoto_kazuya.fortuneteller.Views.MyCustomView;
 import com.example.okamoto_kazuya.fortuneteller.data.HoroscopeContract;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -55,6 +72,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     static final String DETAIL_URI = "URI";
     private Uri mUri;
     private String mShareMessage;
+    private String mSignKey;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -137,7 +155,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         TextView contentView = (TextView) view.findViewById(R.id.list_item_content_textview);
         contentView.setText(content);
 
+        MyCustomView myCustomView = (MyCustomView)view.findViewById(R.id.list_item_myCustomView);
+        myCustomView.setData(money, job, love);
+        myCustomView.setVisibility(View.VISIBLE);
+
         mShareMessage = sign + " ラッキーアイテム：" + item;
+        mSignKey =  Helpers.getSignKey(sign);
     }
 
     @Override
@@ -159,9 +182,42 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private Intent createShareForecastIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.setType("text/plain");
+
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        shareIntent.setType("image/*");
+        Uri imageUri = getShareImageUri();
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         shareIntent.putExtra(Intent.EXTRA_TEXT, mShareMessage);
         return shareIntent;
+    }
+
+    private Uri getShareImageUri(){
+
+        int imageId = getContext().getResources().getIdentifier(mSignKey, "drawable", this.getContext().getPackageName());
+        Bitmap image = BitmapFactory.decodeResource(getContext().getResources(), imageId);
+
+        // 画像を一度SDに保存する というコメントを参考にする。
+        String fileFullPath = getContext().getExternalFilesDir(null) + File.separator + mSignKey + ".jpg";
+
+        BufferedOutputStream boStream = null;
+        Bitmap imageOnSDK = null;
+        try {
+            boStream = new BufferedOutputStream(new FileOutputStream(fileFullPath));
+            imageOnSDK = image.copy(Bitmap.Config.ARGB_8888, true);
+            if (!imageOnSDK.compress(Bitmap.CompressFormat.JPEG, 100, boStream)) {
+            }
+        } catch (Exception e) {
+        } finally {
+            if (imageOnSDK != null) {
+                imageOnSDK.recycle();
+                imageOnSDK = null;
+            }
+            try {
+                boStream.close();
+            } catch (Exception e) {
+
+            }
+        }
+        return Uri.fromFile(new File(fileFullPath));
     }
 }
